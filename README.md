@@ -7,6 +7,10 @@
 [![Latency](https://img.shields.io/badge/Latency-%3C%20650ms%20TTFT-emerald.svg)]()
 [![License](https://img.shields.io/badge/License-Apache%202.0-orange.svg)]()
 
+## 🖥️ Live Application Dashboard
+
+![ChalaakSaathi Live Dashboard](app_screenshot.png)
+
 ---
 
 ## 🎯 Problem Statement & Operational Friction
