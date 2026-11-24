@@ -79,10 +79,10 @@ const htmlDeck = `<!DOCTYPE html>
         Real-Time Vernacular Voice AI Co-Pilot for Cold-Chain & Reefer Truck Driver Detention Resolution Powered by <strong>Gemini 2.0 Flash Multimodal Live</strong>
       </p>
       
-      <div class="grid grid-cols-3 gap-6 pt-6 border-t border-slate-800">
+      <div class="grid grid-cols-4 gap-6 pt-6 border-t border-slate-800">
         <div>
           <span class="text-xs uppercase tracking-wider text-slate-500 block mb-1">Team Name</span>
-          <p class="text-xl font-bold text-white">Team DhwaniFleet</p>
+          <p class="text-xl font-bold text-white">ChalaakSaathi (चालाक साथी)</p>
         </div>
         <div>
           <span class="text-xs uppercase tracking-wider text-slate-500 block mb-1">Team Leader</span>
@@ -90,7 +90,11 @@ const htmlDeck = `<!DOCTYPE html>
         </div>
         <div>
           <span class="text-xs uppercase tracking-wider text-slate-500 block mb-1">Core Tech</span>
-          <p class="text-xl font-bold text-cyan-400">Gemini 2.0 Live (Audio-to-Audio)</p>
+          <p class="text-xl font-bold text-cyan-400">Gemini 2.0 Live (Audio)</p>
+        </div>
+        <div>
+          <span class="text-xs uppercase tracking-wider text-slate-500 block mb-1">GitHub Repo</span>
+          <p class="text-sm font-bold text-cyan-400 font-mono break-all">swatiicfai/ChalaakSaathi-DhwaniFleet-</p>
         </div>
       </div>
     </div>
@@ -687,10 +691,14 @@ const htmlDeck = `<!DOCTYPE html>
         DhwaniFleet transforms raw vernacular voice into autonomous, high-value enterprise logistics actions.
       </p>
 
-      <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 text-left space-y-3">
+      <div class="p-6 rounded-2xl bg-slate-900 border border-cyan-500/30 text-left space-y-3">
+        <div class="flex items-center justify-between text-sm">
+          <span class="text-slate-400">GitHub Repository:</span>
+          <strong class="text-cyan-400 font-mono text-base">https://github.com/swatiicfai/ChalaakSaathi-DhwaniFleet-</strong>
+        </div>
         <div class="flex items-center justify-between text-sm">
           <span class="text-slate-400">Live Application:</span>
-          <strong class="text-cyan-400 font-mono">http://localhost:3000</strong>
+          <strong class="text-white font-mono">http://localhost:3000</strong>
         </div>
         <div class="flex items-center justify-between text-sm">
           <span class="text-slate-400">Architecture:</span>
@@ -698,7 +706,7 @@ const htmlDeck = `<!DOCTYPE html>
         </div>
         <div class="flex items-center justify-between text-sm">
           <span class="text-slate-400">Next Milestone:</span>
-          <strong class="text-white">Field pilot across 500 reefer trucks on Delhi-Mumbai corridor with e-Way bill API integration</strong>
+          <strong class="text-white">Field pilot across 500 reefer trucks on Delhi-Mumbai freight corridor</strong>
         </div>
       </div>
     </div>

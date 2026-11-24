@@ -65,7 +65,7 @@ function updateSlideXml(slideNum, title, paragraphs) {
 
 // SLIDE 1: Title
 let s1 = zip.readAsText('ppt/slides/slide1.xml');
-s1 = s1.replace(/Team Name\s*:\s*/g, 'Team Name : ChalaakSaathi (चालाक साथी)\n');
+s1 = s1.replace(/Team Name\s*:\s*/g, 'Team Name : ChalaakSaathi (चालाक साथी)\nGitHub : https://github.com/swatiicfai/ChalaakSaathi-DhwaniFleet-\n');
 s1 = s1.replace(/Problem Statement\s*:\s*/g, 'Problem Statement : Open Innovation: Real-World Voice AI for Cold-Chain Reefer Detention Resolution\n');
 s1 = s1.replace(/Team Leader Name\s*:\s*/g, 'Team Leader Name : Swati Gupta\n');
 zip.updateFile('ppt/slides/slide1.xml', Buffer.from(s1, 'utf8'));
@@ -125,7 +125,8 @@ updateSlideXml(7, 'Full-Stack Technical Architecture', [
 ]);
 
 // SLIDE 8: Technologies Used
-updateSlideXml(8, 'Technology Stack Being Used', [
+updateSlideXml(8, 'Technology Stack & GitHub Repository', [
+  { text: 'GitHub Open Source Repository: https://github.com/swatiicfai/ChalaakSaathi-DhwaniFleet-', isSubheader: true, color: '0284C7' },
   { text: 'AI Model: Google Gemini 2.0 Flash Multimodal Live API (WebSockets, bidirectional audio tokens, function calling).', isBullet: true },
   { text: 'Audio Framework: Web Audio API (PCM 16-bit linear capture, RMS energy Voice Activity Detection, 24kHz playback queue).', isBullet: true },
   { text: 'Backend Server: Node.js, Express, ws (WebSocket multiplexer), In-Memory / SQLite State Ledger.', isBullet: true },
@@ -160,8 +161,9 @@ updateSlideXml(11, 'Compliance with Hackathon Evaluation Criteria', [
 ]);
 
 // SLIDE 12: Conclusion & Demo Links
-updateSlideXml(12, 'Conclusion & Live Prototype Access', [
-  { text: 'Prototype URL: http://localhost:3000 (Node.js & Gemini 2.0 Live WebSocket)', isBullet: true },
+updateSlideXml(12, 'Conclusion & Live Project Links', [
+  { text: 'GitHub Repository: https://github.com/swatiicfai/ChalaakSaathi-DhwaniFleet-', isSubheader: true, color: '0284C7' },
+  { text: 'Live Application URL: http://localhost:3000 (Node.js & Gemini 2.0 Live WebSocket)', isBullet: true },
   { text: 'Team Name: ChalaakSaathi (Team Leader: Swati Gupta)', isBullet: true },
   { text: 'Next Steps: Fleet pilot across 500 reefer trucks on Delhi-Mumbai corridor with e-Way bill API integration.', isBullet: true }
 ]);
