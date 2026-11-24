@@ -1,0 +1,272 @@
+const fs = require('fs');
+const path = require('path');
+const { execSync } = require('child_process');
+
+console.log('Generating Live Visual Architecture Diagram...');
+
+const svgArchitecture = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" width="1200" height="640">
+  <defs>
+    <radialGradient id="bgG" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#0b1329"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </radialGradient>
+
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+
+    <linearGradient id="cyanG" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+
+    <linearGradient id="geminiG" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#818cf8"/>
+      <stop offset="50%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#ec4899"/>
+    </linearGradient>
+
+    <linearGradient id="emeraldG" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+
+    <linearGradient id="amberG" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+
+    <marker id="arrowCyan" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M 0 0 L 8 4 L 0 8 z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrowPurple" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M 0 0 L 8 4 L 0 8 z" fill="#a855f7"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M 0 0 L 8 4 L 0 8 z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="640" rx="20" fill="url(#bgG)"/>
+  <rect x="2" y="2" width="1196" height="636" rx="18" fill="none" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- Title Banner -->
+  <g transform="translate(40, 30)">
+    <rect width="1120" height="45" rx="10" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <text x="20" y="28" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="bold" fill="#ffffff">
+      CHALAAKSAATHI • END-TO-END LIVE SYSTEM & AGENTIC ARCHITECTURE
+    </text>
+    <text x="1100" y="28" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600" fill="#38bdf8">
+      GOOGLE GEMINI 2.0 FLASH LIVE (AUDIO-TO-AUDIO)
+    </text>
+  </g>
+
+  <!-- COLUMN 1: FRONTLINE ACOUSTIC LAYER -->
+  <g transform="translate(40, 95)">
+    <rect width="250" height="505" rx="14" fill="url(#cardGrad)" stroke="#38bdf8" stroke-width="2" stroke-dasharray="6 3"/>
+    <rect x="0" y="0" width="250" height="36" rx="14" fill="#0284c7" opacity="0.2"/>
+    <text x="125" y="24" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold" fill="#38bdf8" letter-spacing="1">
+      1. FRONTLINE ACOUSTIC INPUT
+    </text>
+
+    <!-- Truck Driver Box -->
+    <rect x="15" y="50" width="220" height="100" rx="10" fill="#020617" stroke="#334155"/>
+    <text x="25" y="72" font-family="sans-serif" font-size="12" font-weight="bold" fill="#ffffff">🚚 Reefer Truck Driver</text>
+    <text x="25" y="92" font-family="sans-serif" font-size="10" fill="#94a3b8">• Speaks Hinglish / Punjabi / Marathi</text>
+    <text x="25" y="108" font-family="sans-serif" font-size="10" fill="#94a3b8">• "Reefer temp 5.4°C ho gaya..."</text>
+    <text x="25" y="128" font-family="sans-serif" font-size="10" font-weight="bold" fill="#38bdf8">Audio In: Continuous 16kHz PCM</text>
+
+    <!-- Noise Box -->
+    <rect x="15" y="165" width="220" height="95" rx="10" fill="#020617" stroke="#d97706"/>
+    <text x="25" y="188" font-family="sans-serif" font-size="12" font-weight="bold" fill="#fbbf24">📢 85+ dB Real-World Noise</text>
+    <text x="25" y="208" font-family="sans-serif" font-size="10" fill="#94a3b8">• 12-Cylinder Diesel Engine Idle</text>
+    <text x="25" y="224" font-family="sans-serif" font-size="10" fill="#94a3b8">• Highway Air Horn Blasts (370Hz)</text>
+    <text x="25" y="240" font-family="sans-serif" font-size="10" fill="#94a3b8">• Dock Chiller Compressors & Wind</text>
+
+    <!-- Barge-In Box -->
+    <rect x="15" y="275" width="220" height="105" rx="10" fill="#450a0a" stroke="#ef4444" stroke-width="2"/>
+    <text x="25" y="298" font-family="sans-serif" font-size="12" font-weight="bold" fill="#fca5a5">⚡ Sudden Mid-Turn Barge-in</text>
+    <text x="25" y="318" font-family="sans-serif" font-size="10" fill="#fecaca">• Guard: "Bay 2 band hai, 4 pe jao!"</text>
+    <text x="25" y="334" font-family="sans-serif" font-size="10" fill="#fecaca">• Driver cuts in: "Ruko, Bay 4 karo!"</text>
+    <text x="25" y="354" font-family="sans-serif" font-size="10" font-weight="bold" fill="#ffffff">Instant Preemption Trigger</text>
+
+    <!-- Audio Out Earphone -->
+    <rect x="15" y="395" width="220" height="90" rx="10" fill="#020617" stroke="#38bdf8"/>
+    <text x="25" y="418" font-family="sans-serif" font-size="12" font-weight="bold" fill="#38bdf8">🔊 Native Vernacular Audio Out</text>
+    <text x="25" y="438" font-family="sans-serif" font-size="10" fill="#94a3b8">• Sub-650ms Response Stream</text>
+    <text x="25" y="454" font-family="sans-serif" font-size="10" fill="#94a3b8">• "Haanji Gurpreet ji, Bay 4 kar diya!"</text>
+    <text x="25" y="470" font-family="sans-serif" font-size="10" font-weight="bold" fill="#34d399">24kHz Audio Playback Queue</text>
+  </g>
+
+  <!-- COLUMN 2: CLIENT AUDIO ENGINE & WEBSOCKET GATEWAY -->
+  <g transform="translate(325, 95)">
+    <rect width="260" height="505" rx="14" fill="url(#cardGrad)" stroke="#3b82f6" stroke-width="1.5"/>
+    <rect x="0" y="0" width="260" height="36" rx="14" fill="#2563eb" opacity="0.2"/>
+    <text x="130" y="24" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold" fill="#60a5fa" letter-spacing="1">
+      2. CLIENT ENGINE & GATEWAY
+    </text>
+
+    <!-- Web Audio API Box -->
+    <rect x="15" y="50" width="230" height="110" rx="10" fill="#020617" stroke="#334155"/>
+    <text x="25" y="72" font-family="sans-serif" font-size="12" font-weight="bold" fill="#ffffff">🎙️ Web Audio API Engine</text>
+    <text x="25" y="92" font-family="sans-serif" font-size="10" fill="#94a3b8">• 16-bit Linear PCM Audio Capture</text>
+    <text x="25" y="108" font-family="sans-serif" font-size="10" fill="#94a3b8">• Float32 to Int16 Base64 Streamer</text>
+    <text x="25" y="124" font-family="sans-serif" font-size="10" fill="#94a3b8">• Real-time Canvas Waveform Visualizer</text>
+    <text x="25" y="142" font-family="sans-serif" font-size="10" font-weight="bold" fill="#38bdf8">Latency Meter: 480ms TTFT</text>
+
+    <!-- VAD & Barge-in Detector -->
+    <rect x="15" y="175" width="230" height="95" rx="10" fill="#020617" stroke="#ef4444"/>
+    <text x="25" y="198" font-family="sans-serif" font-size="12" font-weight="bold" fill="#f87171">🛡️ RMS Energy VAD Detector</text>
+    <text x="25" y="218" font-family="sans-serif" font-size="10" fill="#94a3b8">• Monitors driver voice energy > 0.04</text>
+    <text x="25" y="234" font-family="sans-serif" font-size="10" fill="#94a3b8">• Flushes AudioBufferQueue with 0ms lag</text>
+    <text x="25" y="252" font-family="sans-serif" font-size="10" font-weight="bold" fill="#f87171">Sends INTERRUPT_SIGNAL</text>
+
+    <!-- WebSocket Multiplexer -->
+    <rect x="15" y="285" width="230" height="110" rx="10" fill="#020617" stroke="#3b82f6"/>
+    <text x="25" y="308" font-family="sans-serif" font-size="12" font-weight="bold" fill="#60a5fa">⚡ Node.js WebSocket Proxy</text>
+    <text x="25" y="328" font-family="sans-serif" font-size="10" fill="#94a3b8">• Full-Duplex Binary Stream Proxy</text>
+    <text x="25" y="344" font-family="sans-serif" font-size="10" fill="#94a3b8">• Session Setup & Voice Config ('Puck')</text>
+    <text x="25" y="360" font-family="sans-serif" font-size="10" fill="#94a3b8">• Function Call Interceptor & Broadcaster</text>
+    <text x="25" y="378" font-family="sans-serif" font-size="10" font-weight="bold" fill="#34d399">State Sync to Web Telemetry</text>
+
+    <!-- Live Telemetry State -->
+    <rect x="15" y="410" width="230" height="75" rx="10" fill="#020617" stroke="#34d399"/>
+    <text x="25" y="432" font-family="sans-serif" font-size="11" font-weight="bold" fill="#34d399">📊 Real-Time State Sync</text>
+    <text x="25" y="450" font-family="sans-serif" font-size="10" fill="#94a3b8">• Broadcasts TMS mutation to browser</text>
+    <text x="25" y="466" font-family="sans-serif" font-size="10" fill="#94a3b8">• Bay 4 Assigned • ₹4,400 Claim</text>
+  </g>
+
+  <!-- COLUMN 3: GOOGLE GEMINI 2.0 MULTIMODAL LIVE -->
+  <g transform="translate(615, 95)">
+    <rect width="260" height="505" rx="14" fill="url(#cardGrad)" stroke="#a855f7" stroke-width="2"/>
+    <rect x="0" y="0" width="260" height="36" rx="14" fill="url(#geminiG)" opacity="0.3"/>
+    <text x="130" y="24" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold" fill="#d8b4fe" letter-spacing="1">
+      3. GEMINI 2.0 LIVE REASONER
+    </text>
+
+    <!-- Native Audio-to-Audio -->
+    <rect x="15" y="50" width="230" height="110" rx="10" fill="#020617" stroke="#a855f7"/>
+    <text x="25" y="72" font-family="sans-serif" font-size="12" font-weight="bold" fill="#d8b4fe">🧠 Native Multimodal Live Model</text>
+    <text x="25" y="92" font-family="sans-serif" font-size="10" fill="#94a3b8">• Model: gemini-2.0-flash-exp</text>
+    <text x="25" y="108" font-family="sans-serif" font-size="10" fill="#94a3b8">• Protocol: BidiGenerateContent WS</text>
+    <text x="25" y="124" font-family="sans-serif" font-size="10" fill="#94a3b8">• Eliminates STT/TTS cascaded delay</text>
+    <text x="25" y="142" font-family="sans-serif" font-size="10" font-weight="bold" fill="#d8b4fe">Prebuilt Voice Preset: 'Puck'</text>
+
+    <!-- Vernacular & Code-Switch -->
+    <rect x="15" y="175" width="230" height="95" rx="10" fill="#020617" stroke="#c084fc"/>
+    <text x="25" y="198" font-family="sans-serif" font-size="12" font-weight="bold" fill="#e9d5ff">🗣️ Vernacular & Code-Switching</text>
+    <text x="25" y="218" font-family="sans-serif" font-size="10" fill="#94a3b8">• Zero manual language selection</text>
+    <text x="25" y="234" font-family="sans-serif" font-size="10" fill="#94a3b8">• Seamlessly parses mixed sentences</text>
+    <text x="25" y="252" font-family="sans-serif" font-size="10" font-weight="bold" fill="#e9d5ff">Hinglish / Punjabi / Marathi</text>
+
+    <!-- Function Declarations -->
+    <rect x="15" y="285" width="230" height="195" rx="10" fill="#020617" stroke="#ec4899"/>
+    <text x="25" y="308" font-family="sans-serif" font-size="12" font-weight="bold" fill="#f472b6">⚙️ Agentic Function Calling</text>
+    <text x="25" y="328" font-family="sans-serif" font-size="9.5" fill="#fbcfe8">• update_tms_dock_slot</text>
+    <text x="35" y="342" font-family="sans-serif" font-size="8.5" fill="#94a3b8">args: {gate: "Bay 4", reason: "..."}</text>
+    <text x="25" y="360" font-family="sans-serif" font-size="9.5" fill="#fbcfe8">• log_reefer_temperature_excursion</text>
+    <text x="35" y="374" font-family="sans-serif" font-size="8.5" fill="#94a3b8">args: {temp: 5.4, status: "CRITICAL"}</text>
+    <text x="25" y="392" font-family="sans-serif" font-size="9.5" fill="#fbcfe8">• file_detention_demurrage_claim</text>
+    <text x="35" y="406" font-family="sans-serif" font-size="8.5" fill="#94a3b8">args: {hrs: 2, rate: 2200}</text>
+    <text x="25" y="424" font-family="sans-serif" font-size="9.5" fill="#fbcfe8">• generate_voice_incident_card</text>
+    <text x="35" y="438" font-family="sans-serif" font-size="8.5" fill="#94a3b8">args: {summary: "...", lang: "Hinglish"}</text>
+    <text x="25" y="462" font-family="sans-serif" font-size="10" font-weight="bold" fill="#34d399">ToolResponse Loopback in Context</text>
+  </g>
+
+  <!-- COLUMN 4: DOWNSTREAM ACTION EXECUTION -->
+  <g transform="translate(905, 95)">
+    <rect width="255" height="505" rx="14" fill="url(#cardGrad)" stroke="#10b981" stroke-width="2"/>
+    <rect x="0" y="0" width="255" height="36" rx="14" fill="#059669" opacity="0.25"/>
+    <text x="127" y="24" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold" fill="#34d399" letter-spacing="1">
+      4. ENTERPRISE ACTION EXECUTION
+    </text>
+
+    <!-- TMS Database -->
+    <rect x="15" y="50" width="225" height="100" rx="10" fill="#020617" stroke="#10b981"/>
+    <text x="25" y="72" font-family="sans-serif" font-size="12" font-weight="bold" fill="#34d399">🏢 Warehouse TMS Dock API</text>
+    <text x="25" y="92" font-family="sans-serif" font-size="10" fill="#94a3b8">• Slot Reassignment: Bay 2 → Bay 4</text>
+    <text x="25" y="108" font-family="sans-serif" font-size="10" fill="#94a3b8">• Generates e-Gate Pass #GP-8841</text>
+    <text x="25" y="128" font-family="sans-serif" font-size="10" font-weight="bold" fill="#34d399">Atomic State Mutation Confirmed</text>
+
+    <!-- IoT Reefer Telematics -->
+    <rect x="15" y="165" width="225" height="100" rx="10" fill="#020617" stroke="#ef4444"/>
+    <text x="25" y="188" font-family="sans-serif" font-size="12" font-weight="bold" fill="#f87171">❄️ Reefer Cold-Chain Audit Log</text>
+    <text x="25" y="208" font-family="sans-serif" font-size="10" fill="#94a3b8">• Critical Excursion Ticket #CC-EXC-9021</text>
+    <text x="25" y="224" font-family="sans-serif" font-size="10" fill="#94a3b8">• Temp +5.4°C Logged with GPS & Time</text>
+    <text x="25" y="244" font-family="sans-serif" font-size="10" font-weight="bold" fill="#f87171">Pharma SLA Audit Trail Saved</text>
+
+    <!-- Demurrage Ledger -->
+    <rect x="15" y="280" width="225" height="100" rx="10" fill="#020617" stroke="#f59e0b"/>
+    <text x="25" y="303" font-family="sans-serif" font-size="12" font-weight="bold" fill="#fbbf24">⏱️ Demurrage & Detention Ledger</text>
+    <text x="25" y="323" font-family="sans-serif" font-size="10" fill="#94a3b8">• Claim ID #DEM-4829 Created</text>
+    <text x="25" y="339" font-family="sans-serif" font-size="10" fill="#94a3b8">• 2.0 Hours Detention @ ₹2,200/hr</text>
+    <text x="25" y="359" font-family="sans-serif" font-size="10" font-weight="bold" fill="#fbbf24">₹4,400 Demurrage Legally Billed</text>
+
+    <!-- WhatsApp Cloud API (Bonus) -->
+    <rect x="15" y="395" width="225" height="90" rx="10" fill="#020617" stroke="#3b82f6"/>
+    <text x="25" y="418" font-family="sans-serif" font-size="12" font-weight="bold" fill="#60a5fa">📲 WhatsApp Cloud API (Bonus)</text>
+    <text x="25" y="438" font-family="sans-serif" font-size="10" fill="#94a3b8">• Bilingual Voice Incident POD Card</text>
+    <text x="25" y="454" font-family="sans-serif" font-size="10" fill="#94a3b8">• Auto-dispatched to Consignee & Fleet</text>
+    <text x="25" y="470" font-family="sans-serif" font-size="10" font-weight="bold" fill="#38bdf8">Shareable Audio Incident Link</text>
+  </g>
+
+  <!-- CONNECTING ARROWS -->
+  <!-- Col 1 to Col 2 -->
+  <line x1="290" y1="190" x2="325" y2="190" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrowCyan)"/>
+  <line x1="325" y1="440" x2="290" y2="440" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrowCyan)"/>
+
+  <!-- Col 2 to Col 3 -->
+  <line x1="585" y1="200" x2="615" y2="200" stroke="#a855f7" stroke-width="2.5" marker-end="url(#arrowPurple)"/>
+  <line x1="615" y1="340" x2="585" y2="340" stroke="#a855f7" stroke-width="2.5" marker-end="url(#arrowPurple)"/>
+
+  <!-- Col 3 to Col 4 -->
+  <line x1="875" y1="360" x2="905" y2="360" stroke="#34d399" stroke-width="2.5" marker-end="url(#arrowGreen)"/>
+  <line x1="905" y1="450" x2="875" y2="450" stroke="#34d399" stroke-width="2.5" marker-end="url(#arrowGreen)"/>
+</svg>
+`;
+
+const svgPath = path.join(__dirname, 'public', 'architecture_diagram.svg');
+const htmlPath = path.join(__dirname, 'public', 'arch_render.html');
+const pngPath = path.join(__dirname, 'ChalaakSaathi_Architecture_Diagram.png');
+const downloadsPngPath = 'C:\\Users\\Swati\\Downloads\\ChalaakSaathi_Architecture_Diagram.png';
+
+fs.writeFileSync(svgPath, svgArchitecture.trim());
+
+const renderHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { margin: 0; padding: 0; background: #020617; overflow: hidden; }
+  </style>
+</head>
+<body>
+  ${svgArchitecture}
+</body>
+</html>
+`;
+fs.writeFileSync(htmlPath, renderHtml);
+
+const chromePath = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
+const edgePath = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe';
+const browser = fs.existsSync(chromePath) ? chromePath : edgePath;
+
+console.log('Rendering 1200x640 Architecture PNG...');
+try {
+  const cmd = `"${browser}" --headless --disable-gpu --window-size=1200,640 --screenshot="${pngPath}" "file:///${htmlPath.replace(/\\/g, '/')}"`;
+  execSync(cmd);
+  fs.copyFileSync(pngPath, downloadsPngPath);
+  console.log('Architecture PNG created successfully at:');
+  console.log('1. ', pngPath);
+  console.log('2. ', downloadsPngPath);
+} catch (e) {
+  console.error('Render error:', e.message);
+}

@@ -34,6 +34,8 @@ Unlike fragile cascaded bots (STT $\to$ LLM $\to$ TTS) with 3–5s latency, Chal
 
 ## 🏗️ System Architecture
 
+![ChalaakSaathi Architecture Diagram](ChalaakSaathi_Architecture_Diagram.png)
+
 ```
 [ FRONTEND CLIENT (Browser / Mobile PWA) ]
  ├── Audio Input: Web Audio API (PCM 16kHz linear mono)
