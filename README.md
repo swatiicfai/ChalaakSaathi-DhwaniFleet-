@@ -1,9 +1,11 @@
 # 🚚 ChalaakSaathi (चालाक साथी / DhwaniFleet)
 ### Real-Time Vernacular Voice AI Co-Pilot for Cold-Chain & Reefer Truck Driver Detention Resolution
-**Built with Google Gemini 2.0 Flash Multimodal Live | Hack2Skill "Build with Google Gemini" Hackathon**
+**Built with Google Gemini 3.8 Live | Hack2Skill "Build with Google Gemini" Hackathon**
 
 [![Track](https://img.shields.io/badge/Track-Open%20Innovation%3A%20Real--World%20Voice%20AI-blue.svg)](https://hack2skill.com/event/buildwithgemini/)
-[![AI Model](https://img.shields.io/badge/Model-Gemini%202.0%20Flash%20Live-cyan.svg)](https://deepmind.google/technologies/gemini/)
+[![AI Model](https://img.shields.io/badge/Model-Gemini%203.8%20Live-cyan.svg)](https://deepmind.google/technologies/gemini/)
+[![SDK](https://img.shields.io/badge/SDK-%40google%2Fgenai%20v1beta-purple.svg)](https://github.com/googleapis/js-genai)
+[![Persistence](https://img.shields.io/badge/Storage-SQLite%20(node%3Asqlite)-green.svg)]()
 [![Latency](https://img.shields.io/badge/Latency-%3C%20650ms%20TTFT-emerald.svg)]()
 [![License](https://img.shields.io/badge/License-Apache%202.0-orange.svg)]()
 
@@ -25,13 +27,13 @@ When a reefer (refrigerated) truck arrives with high-value, temperature-sensitiv
 ---
 
 ## 💡 The Solution: ChalaakSaathi (DhwaniFleet)
-**ChalaakSaathi** is a hands-free, real-time vernacular voice agent built on **Google Gemini 2.0 Flash Multimodal Live API**. 
+**ChalaakSaathi** is a hands-free, real-time vernacular voice agent built on **Google Gemini 3.8 Live API** via `@google/genai` (v1beta). 
 
 Unlike fragile cascaded bots (STT $\to$ LLM $\to$ TTS) with 3–5s latency, ChalaakSaathi streams bidirectional audio tokens over WebSockets with **sub-650ms latency**, providing:
-1. **Vernacular & Code-Switched Fluency:** Auto-detects spoken dialect (Hinglish, Punjabi, Marathi) with zero manual language switching.
+1. **Vernacular & Code-Switched Fluency:** Auto-detects spoken dialect (Hinglish, Punjabi, Marathi, Tamil) with zero manual language switching.
 2. **Organic Mid-Sentence Barge-in (Interruption):** Instantly cancels audio playback with 0ms hangover when dock guards shout or drivers interrupt mid-sentence.
-3. **Acoustic Field Noise Resilience:** Built-in noise filtering resilient against loud diesel engines and air horns.
-4. **Atomic State Mutation:** Executes real functions on warehouse Transport Management Systems (TMS), logging cold-chain excursions and locking in demurrage compensation claims.
+3. **Acoustic Field Noise Resilience:** Built-in AudioWorklet linear downsampling (16kHz PCM) and noise filtering resilient against loud diesel engines and air horns.
+4. **Atomic State Mutation:** Executes real functions on warehouse Transport Management Systems (TMS), logging cold-chain excursions and locking in demurrage compensation claims in SQLite.
 5. **Bonus Track — Vernacular Voice Incident Card:** Auto-curates spoken driver updates into a signed, shareable bilingual WhatsApp voice card.
 
 ---
@@ -42,29 +44,31 @@ Unlike fragile cascaded bots (STT $\to$ LLM $\to$ TTS) with 3–5s latency, Chal
 
 ```
 [ FRONTEND CLIENT (Browser / Mobile PWA) ]
- ├── Audio Input: Web Audio API (PCM 16kHz linear mono)
- ├── Audio Output: Web Audio API (24kHz AudioBufferQueue)
- ├── VAD & Barge-in: Local RMS energy preemption detector
+ ├── Audio Input: AudioWorklet pcm-16k-capture-processor (Linear Downsampling to 16kHz PCM)
+ ├── Audio Output: Web Audio API (24kHz AudioBufferQueue, Voice 'Puck')
+ ├── VAD & Barge-in: Local RMS energy preemption detector + INTERRUPT_SIGNAL
  ├── Acoustic Noise Simulator: Diesel Idle, Air Horns, Dock chatter
- └── Live HUD: TTFT Latency meter + Real-time TMS mutation ledger
+ └── Live HUD: TTFT Latency meter + SQLite TMS mutation ledger
                             │
                Bidirectional WebSocket Stream
                             │
-[ NODE.JS WEBSOCKET GATEWAY ]
- ├── Stream multiplexer & turn coordinator
- └── Gemini Multimodal Live Bridge (`wss://generativelanguage.googleapis.com`)
+[ NODE.JS WEBSOCKET GATEWAY & REST API ]
+ ├── Stream multiplexer, origin security verification & turn coordinator
+ ├── Session Resumption & GoAway handle management
+ └── Gemini 3.8 Live Bridge via @google/genai SDK (v1beta BidiGenerateContent)
                             │
-[ GOOGLE GEMINI 2.0 FLASH LIVE ENGINE ]
- ├── Native Audio-to-Audio (BidiGenerateContent, Voice 'Puck')
+[ GOOGLE GEMINI 3.8 LIVE ENGINE ]
+ ├── Native Audio-to-Audio (24kHz synthesis, voice 'Puck')
  ├── Vernacular context & code-switching reasoner
- └── Tool Calling / Function Declarations:
+ └── Tool Calling / Non-Blocking Function Declarations:
+      ├── `verify_eway_bill(eway_bill_number)`
       ├── `update_tms_dock_slot(gate_number, reason)`
       ├── `log_reefer_temperature_excursion(current_temp, status)`
       ├── `file_detention_demurrage_claim(warehouse_name, detention_hours)`
       └── `generate_shareable_voice_incident_card(summary, vernacular_language)`
                             │
 [ BACKEND ACTION SERVICES & LEDGER ]
- ├── In-Memory & SQLite State Ledger
+ ├── Native SQLite State Ledger (node:sqlite with WAL Mode)
  ├── Mock TMS REST API & NIC e-Way Bill Validator
  └── WhatsApp Cloud API Dispatcher
 ```
@@ -75,11 +79,11 @@ Unlike fragile cascaded bots (STT $\to$ LLM $\to$ TTS) with 3–5s latency, Chal
 
 | Feature | Hackathon Requirement | ChalaakSaathi Implementation |
 | :--- | :--- | :--- |
-| **Native Voice** | Sub-second audio flow | Gemini 2.0 Flash Live API over WebSockets (< 650ms TTFT) |
-| **Interruption** | Mid-sentence barge-in | Preempts audio turn instantly upon voice energy detection |
-| **Vernacular** | Multi-lingual / Code-switched | Natively speaks & understands Hinglish, Punjabi, Marathi |
-| **Noise Resilience** | Realistic ambient noise | 3-channel synthesizer (Diesel idle, air horns, dock hum) |
-| **State Mutation** | Real backend transactions | Mutates TMS dock slots, logs excursions & demurrage claims |
+| **Native Voice** | Sub-second audio flow | Gemini 3.8 Live API over WebSockets (< 650ms TTFT) |
+| **Interruption** | Mid-sentence barge-in | Preempts audio turn instantly upon voice energy detection (3 consecutive frames) |
+| **Vernacular** | Multi-lingual / Code-switched | Natively speaks & understands Hinglish, Punjabi, Marathi, Tamil |
+| **Noise Resilience** | Realistic ambient noise | 3-channel synthesizer (Diesel idle, air horns, dock hum) + AudioWorklet capture |
+| **State Mutation** | Real backend transactions | Mutates TMS dock slots, logs excursions & demurrage claims in SQLite |
 | **Bonus Track** | Curated shareable content | Auto-generates bilingual WhatsApp Voice Incident Cards |
 
 ---
@@ -87,14 +91,14 @@ Unlike fragile cascaded bots (STT $\to$ LLM $\to$ TTS) with 3–5s latency, Chal
 ## 💰 Measurable ROI & Commercial Viability
 - **₹18,400 Saved / Truck / Month:** Recovered through verified detention compensation claims (₹2,200/hr) and avoided idle fuel burn.
 - **94.2% Spoilage Risk Avoided:** Immediate temperature excursion logging alerts warehouse chillers on ₹1.45 Cr cargo.
-- **> 100x ROI Multiplier:** Gemini 2.0 Flash Live costs only ~₹0.18 ($0.0022) per 30-second interaction.
+- **> 100x ROI Multiplier:** Gemini 3.8 Live costs only ~₹0.18 ($0.0022) per 30-second interaction.
 
 ---
 
 ## 🚀 Quickstart & Installation
 
 ### Prerequisites
-- Node.js (v18+ or v24+)
+- Node.js v24+ (uses built-in `node:sqlite`)
 - Google Gemini API Key
 
 ### 1. Clone & Install

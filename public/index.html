@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DhwaniFleet — Real-World Voice AI for Cold-Chain Logistics | Powered by Google Gemini</title>
-  <!-- Tailwind CSS -->
+  <title>ChalaakSaathi (DhwaniFleet) — Real-World Voice AI | Gemini 3.8 Live</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
@@ -19,41 +18,42 @@
           <i class="fa-solid fa-truck-ramp-box text-white text-xl"></i>
         </div>
         <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-xl font-bold tracking-tight text-white">DhwaniFleet</h1>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h1 class="text-xl font-bold tracking-tight text-white">ChalaakSaathi</h1>
+            <span class="text-xs text-slate-400 font-medium">(चालाक साथी • DhwaniFleet)</span>
             <span class="text-xs px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-mono">LIVE AGENT</span>
-            <span class="text-xs px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30 font-semibold">Gemini 2.0 Flash Live</span>
+            <span id="modelBadge" class="text-xs px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30 font-semibold">Gemini 3.8 Live</span>
           </div>
-          <p class="text-xs text-slate-400">Cold-Chain & Reefer Driver Detention Resolver • Life Sciences & MSME Logistics</p>
+          <p class="text-xs text-slate-400">Vernacular Cold-Chain & Reefer Driver Detention Resolver • Life Sciences & MSME Logistics</p>
         </div>
       </div>
 
-      <!-- Telemetry Strip (Visible Latency & Model Connection) -->
-      <div class="flex items-center gap-3 bg-slate-950/80 px-4 py-2 rounded-xl border border-slate-800 text-xs">
+      <!-- Telemetry Strip (Visible Latency, Model Connection, SQLite Persistence) -->
+      <div class="flex items-center gap-3 bg-slate-950/80 px-4 py-2 rounded-xl border border-slate-800 text-xs flex-wrap">
         <div class="flex items-center gap-2">
           <span id="connectionDot" class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
-          <span id="connectionText" class="text-slate-300 font-medium">Ready to Connect</span>
+          <span id="connectionText" class="text-slate-300 font-medium">Connecting...</span>
         </div>
         <div class="h-4 w-px bg-slate-800"></div>
         <div class="flex items-center gap-1.5 font-mono">
           <i class="fa-solid fa-bolt text-yellow-400"></i>
-          <span class="text-slate-400">Latency:</span>
+          <span class="text-slate-400">TTFT:</span>
           <span id="latencyValue" class="text-cyan-400 font-bold">-- ms</span>
         </div>
         <div class="h-4 w-px bg-slate-800"></div>
-        <div class="flex items-center gap-1.5">
-          <i class="fa-solid fa-shield-halved text-emerald-400"></i>
-          <span class="text-emerald-400 font-medium">SLA Protected</span>
+        <div class="flex items-center gap-1.5 font-mono">
+          <i class="fa-solid fa-database text-emerald-400"></i>
+          <span id="persistenceBadge" class="text-emerald-400 font-medium">SQLite Ready</span>
         </div>
       </div>
 
       <!-- Action Buttons -->
       <div class="flex items-center gap-2">
-        <button id="btnSettings" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm transition">
+        <button id="btnSettings" title="Gemini Live Settings" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm transition">
           <i class="fa-solid fa-gear"></i>
         </button>
         <button id="btnResetState" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-rose-900/50 text-slate-300 hover:text-rose-300 text-xs font-medium border border-slate-700 transition">
-          <i class="fa-solid fa-rotate-left mr-1"></i> Reset Demo State
+          <i class="fa-solid fa-rotate-left mr-1"></i> Reset SQLite State
         </button>
       </div>
     </div>
@@ -80,20 +80,18 @@
 
         <!-- Big Mic / Live Status Visualizer -->
         <div class="flex flex-col items-center justify-center py-6 bg-slate-950/60 rounded-xl border border-slate-800/80 mb-4 relative">
-          <!-- Audio Visualizer Canvas -->
           <canvas id="visualizerCanvas" width="360" height="80" class="w-full h-20 mb-3"></canvas>
 
-          <!-- Voice Mic Trigger Button -->
           <button id="btnStartVoice" class="relative group focus:outline-none">
             <div id="micPulseRing" class="absolute -inset-2 rounded-full bg-cyan-500/20 blur-md group-hover:bg-cyan-500/30 transition duration-300"></div>
             <div id="micButtonCircle" class="relative w-20 h-20 rounded-full bg-gradient-to-tr from-cyan-600 to-blue-600 flex items-center justify-center text-white text-2xl shadow-xl shadow-cyan-600/40 group-active:scale-95 transition-all">
               <i id="micIcon" class="fa-solid fa-microphone"></i>
             </div>
           </button>
-          
-          <p id="voiceStatusHint" class="text-xs text-slate-400 mt-3 font-medium">Click microphone to connect Gemini Live Audio</p>
+
+          <p id="voiceStatusHint" class="text-xs text-slate-400 mt-3 font-medium text-center px-4">Click microphone for live 16kHz PCM audio to Gemini 3.8 Live</p>
           <div class="flex items-center gap-2 mt-1 text-[11px] text-slate-500">
-            <span>PCM 16kHz Streaming</span> • <span>Sub-second Turn Taking</span>
+            <span id="captureModeLabel">AudioWorklet 16kHz PCM</span> • <span>24kHz Output</span> • <span>Auto Barge-In</span>
           </div>
         </div>
 
@@ -102,11 +100,11 @@
           <div class="flex items-center justify-between mb-2">
             <span class="text-xs font-semibold text-slate-300 flex items-center gap-2">
               <i class="fa-solid fa-volume-high text-amber-400"></i>
-              Real-World Acoustic Noise Simulator (Indian Yard/Highway)
+              Real-World Acoustic Noise Simulator
             </span>
-            <span class="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">Field Stress Test</span>
+            <span class="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">85 dB Stress Test</span>
           </div>
-          <p class="text-[11px] text-slate-400 mb-3">Simulates loud 12-cylinder diesel idle, pneumatic air horns, and dockyard chatter directly into your audio test:</p>
+          <p class="text-[11px] text-slate-400 mb-3">Simulates 12-cylinder diesel idle, pneumatic air horns, and dockyard chatter:</p>
 
           <div class="grid grid-cols-3 gap-2 mb-3">
             <button id="noiseTruck" class="noise-btn px-2.5 py-2 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-300 hover:border-amber-500/50 flex flex-col items-center gap-1 transition">
@@ -123,61 +121,80 @@
             </button>
           </div>
 
-          <!-- Noise Volume Slider -->
-          <div class="flex items-center gap-3">
+          <div class="flex items-center gap-3 mb-2">
             <span class="text-[11px] text-slate-400">Noise Level:</span>
             <input id="noiseVolume" type="range" min="0" max="100" value="30" class="flex-1 accent-amber-500 h-1.5 bg-slate-800 rounded-lg cursor-pointer">
             <span id="noiseVolLabel" class="text-xs font-mono text-amber-400 w-8 text-right">30%</span>
           </div>
+
+          <label class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/80 text-[11px] text-slate-300 cursor-pointer">
+            <span>Mix synthetic yard noise into mic stream (headphone-safe test)</span>
+            <input id="chkMixNoiseToMic" type="checkbox" checked class="accent-amber-500 w-3.5 h-3.5 rounded">
+          </label>
         </div>
 
-        <!-- QUICK TEST SCENARIO PROMPTS (For Judges & Instant Evaluation) -->
+        <!-- QUICK TEST SCENARIO PROMPTS (Live Gemini 3.8 + Offline SQLite Fallback) -->
         <div class="mt-4 pt-3 border-t border-slate-800/80">
           <div class="flex items-center justify-between mb-2">
             <span class="text-xs font-semibold text-slate-300">
               <i class="fa-solid fa-wand-magic-sparkles text-cyan-400 mr-1"></i> Quick Test Vernacular Scenarios:
             </span>
-            <span class="text-[10px] text-slate-500">Tap to simulate voice turn</span>
+            <span id="scenarioModeHint" class="text-[10px] text-cyan-400 font-mono">Routes to Gemini 3.8 Live</span>
           </div>
           <div class="space-y-2">
             <button class="test-scenario-btn w-full text-left p-2.5 rounded-lg bg-slate-950/80 hover:bg-slate-800/80 border border-slate-800/80 text-xs transition group"
-                    data-text="Bhaiya hum Sonipat warehouse gate 2 pe pahunch gaye. Eway bill 408 hai aur reefer temp 5.4 degree ho gaya hai. Gate entry karwa do."
-                    data-role="driver" data-lang="Hinglish / Hindi">
+                    data-text="Bhaiya hum Sonipat warehouse gate 2 pe pahunch gaye. E-way bill number 408 verify karo, aur reefer container ka temperature 5.4 degree ho gaya hai."
+                    data-lang="Hinglish / Punjabi"
+                    data-action="arrival">
               <div class="flex items-center justify-between text-cyan-400 font-semibold mb-0.5">
-                <span>1. Arrival & Temperature Warning (Hinglish)</span>
+                <span>1. Arrival, e-Way Bill & Temp Alert (Hinglish)</span>
                 <i class="fa-solid fa-play text-[10px] opacity-0 group-hover:opacity-100 transition"></i>
               </div>
-              <p class="text-slate-400 text-[11px]">"Bhaiya hum Sonipat gate 2 pe pahunch gaye... reefer temp 5.4 degree ho gaya hai."</p>
+              <p class="text-slate-400 text-[11px]">"Bhaiya Sonipat gate 2 pe hain... E-way bill 408 verify karo, reefer temp 5.4 degree hai."</p>
             </button>
 
             <button class="test-scenario-btn w-full text-left p-2.5 rounded-lg bg-slate-950/80 hover:bg-rose-950/30 border border-slate-800/80 hover:border-rose-500/40 text-xs transition group"
                     data-text="Arre ruko ruko! Guard ne abhi bola Bay 2 ka chiller band hai, slot Bay 4 pe shift karo jaldi!"
-                    data-role="driver" data-lang="Interruption / Barge-in">
+                    data-lang="Interruption / Barge-in"
+                    data-action="bargein">
               <div class="flex items-center justify-between text-rose-400 font-semibold mb-0.5">
-                <span>2. Mid-Sentence Interruption / Barge-In (Urgent Bay Shift)</span>
+                <span>2. Mid-Sentence Interruption / Barge-In (Bay 4 Shift)</span>
                 <i class="fa-solid fa-hand text-[10px] opacity-0 group-hover:opacity-100 transition"></i>
               </div>
-              <p class="text-slate-400 text-[11px]">"Arre ruko ruko! Guard ne bola Bay 2 chiller kharab hai, Bay 4 pe shift karo!"</p>
+              <p class="text-slate-400 text-[11px]">"Arre ruko ruko! Guard ne bola Bay 2 chiller band hai, slot Bay 4 pe shift karo!"</p>
+            </button>
+
+            <button class="test-scenario-btn w-full text-left p-2.5 rounded-lg bg-slate-950/80 hover:bg-indigo-950/30 border border-slate-800/80 hover:border-indigo-500/40 text-xs transition group"
+                    data-text="Anna, Chennai Ambattur cold hub gate-la nikkirom. E-way bill 409 check pannunga, reefer temp 5.8 degree aagiduchu, urgent bay allocate pannunga!"
+                    data-lang="Tamil / Tanglish"
+                    data-action="tanglish">
+              <div class="flex items-center justify-between text-indigo-400 font-semibold mb-0.5">
+                <span>3. Multi-Lingual Check-In (Tamil / Tanglish)</span>
+                <i class="fa-solid fa-language text-[10px] opacity-0 group-hover:opacity-100 transition"></i>
+              </div>
+              <p class="text-slate-400 text-[11px]">"Anna, Chennai cold hub gate-la nikkirom. E-way bill 409 check pannunga, temp 5.8°C..."</p>
             </button>
 
             <button class="test-scenario-btn w-full text-left p-2.5 rounded-lg bg-slate-950/80 hover:bg-slate-800/80 border border-slate-800/80 text-xs transition group"
-                    data-text="Guard bol raha hai unloading ke liye 2 ghante wait karna padega. Official detention claim file karo."
-                    data-role="driver" data-lang="Fintech / Demurrage">
+                    data-text="Guard bol raha hai unloading ke liye 2 ghante wait karna padega. Sonipat Cold Hub pe official detention claim file karo."
+                    data-lang="Hinglish / Demurrage"
+                    data-action="detention">
               <div class="flex items-center justify-between text-amber-400 font-semibold mb-0.5">
-                <span>3. Detention & Demurrage Claim (₹2,200/hr SLA Action)</span>
+                <span>4. Detention & Demurrage Claim (₹2,200/hr SLA)</span>
                 <i class="fa-solid fa-play text-[10px] opacity-0 group-hover:opacity-100 transition"></i>
               </div>
               <p class="text-slate-400 text-[11px]">"Guard bol raha hai 2 ghante wait karna padega... detention claim file karo."</p>
             </button>
 
             <button class="test-scenario-btn w-full text-left p-2.5 rounded-lg bg-slate-950/80 hover:bg-emerald-950/30 border border-slate-800/80 hover:border-emerald-500/40 text-xs transition group"
-                    data-text="Manager aur consignee ke liye vernacular voice incident summary card bana do WhatsApp pe bhejane ke liye."
-                    data-role="driver" data-lang="Bonus Track">
+                    data-text="Manager aur consignee ke liye bilingual vernacular voice incident summary card bana do WhatsApp pe bhejne ke liye."
+                    data-lang="Bonus Track"
+                    data-action="card">
               <div class="flex items-center justify-between text-emerald-400 font-semibold mb-0.5">
-                <span>4. Bonus: WhatsApp Voice Incident Card Dispatch</span>
+                <span>5. Bonus: WhatsApp Voice Incident Card Dispatch</span>
                 <i class="fa-solid fa-share-nodes text-[10px] opacity-0 group-hover:opacity-100 transition"></i>
               </div>
-              <p class="text-slate-400 text-[11px]">Auto-curates spoken updates into a shareable bilingual card for consignees.</p>
+              <p class="text-slate-400 text-[11px]">Auto-curates spoken updates into a shareable bilingual POD card.</p>
             </button>
           </div>
         </div>
@@ -195,7 +212,7 @@
         </div>
         <div id="transcriptBox" class="space-y-3 max-h-64 overflow-y-auto pr-1 text-xs">
           <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-slate-400 italic">
-            Spoken dialogue, real-time code-switching, and model responses will appear here live...
+            Live input/output transcriptions and model audio turns will appear here...
           </div>
         </div>
       </div>
@@ -210,15 +227,16 @@
       <div class="bg-slate-900 rounded-2xl border border-slate-800 p-5 shadow-xl">
         <div class="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-800">
           <div>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 flex-wrap">
               <span class="text-lg font-bold text-white tracking-wide" id="truckPlate">HR-55-AJ-9021</span>
               <span class="text-xs px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 font-mono">16-Wheeler Multi-Axle Reefer</span>
+              <span id="ewayBadge" class="text-xs px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30 font-mono">EWB-408 • PENDING_GATE_VERIFY</span>
             </div>
             <p class="text-xs text-slate-400 mt-0.5">Driver: <strong class="text-slate-200" id="driverName">Gurpreet Singh</strong> (+91 98765 43210)</p>
           </div>
           <div class="text-right">
             <span class="text-xs text-slate-400">Consignee Hub:</span>
-            <div class="text-xs font-semibold text-slate-200">Bharat Life Sciences Cold Hub, Sonipat</div>
+            <div class="text-xs font-semibold text-slate-200" id="consigneeName">Bharat Life Sciences Cold Hub (Sonipat)</div>
           </div>
         </div>
 
@@ -233,7 +251,7 @@
               <span>Gate 2 - Bay 2</span>
             </div>
             <span id="slotStatusBadge" class="inline-block mt-2 text-[10px] px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">
-              PENDING INSPECTION
+              GATE_ARRIVED_PENDING_INSPECTION
             </span>
           </div>
 
@@ -245,7 +263,7 @@
               <span>+5.4 °C</span>
             </div>
             <span id="tempStatusBadge" class="inline-block mt-2 text-[10px] px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20">
-              EXCURSION WARNING (> 4°C)
+              WARNING_EXCURSION
             </span>
           </div>
 
@@ -264,15 +282,15 @@
         </div>
       </div>
 
-      <!-- Live Backend Action & Mutation Ledger (PROVING REAL STATE MUTATION) -->
+      <!-- Live Backend Action & Mutation Ledger (PROVING REAL SQLITE PERSISTENCE) -->
       <div class="bg-slate-900 rounded-2xl border border-slate-800 p-5 shadow-xl">
         <div class="flex items-center justify-between mb-4">
           <div>
             <h3 class="font-semibold text-white flex items-center gap-2">
               <i class="fa-solid fa-database text-cyan-400"></i>
-              Real-Time TMS & Ledger Mutation Feed
+              Real-Time TMS & SQLite Audit Ledger
             </h3>
-            <p class="text-xs text-slate-400">Proves spoken intent executes real atomic backend database & ERP updates</p>
+            <p class="text-xs text-slate-400">Every spoken tool invocation persists atomically to SQLite (<code>node:sqlite</code>)</p>
           </div>
           <span class="text-xs px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">
             LIVE SYNC: ACTIVE
@@ -299,24 +317,23 @@
         </div>
 
         <p class="text-xs text-slate-300 mb-4">
-          Gemini synthesizes the driver's spoken narration and dockyard events into a personalized, shareable digital audio & incident dispatch card in their native language:
+          Gemini 3.8 Live synthesizes spoken driver narration and gate events into a shareable digital dispatch card:
         </p>
 
-        <!-- The Curated Incident Card Container -->
         <div id="bonusCardContainer" class="p-4 rounded-xl bg-slate-950/80 border border-indigo-500/20">
           <div class="flex items-start justify-between gap-4">
             <div>
               <div class="flex items-center gap-2 mb-1">
-                <span class="text-xs font-bold text-white" id="bonusCardId">INCIDENT-CARD #CC-9021</span>
-                <span class="text-[10px] px-2 py-0.2 rounded bg-rose-500/20 text-rose-300 font-semibold" id="bonusUrgency">URGENT</span>
-                <span class="text-[10px] text-slate-400 font-mono" id="bonusTimestamp">Today, 11:15 AM</span>
+                <span class="text-xs font-bold text-white" id="bonusCardId">NO CARD GENERATED YET</span>
+                <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-semibold" id="bonusUrgency">STANDBY</span>
+                <span class="text-[10px] text-slate-400 font-mono" id="bonusTimestamp">--</span>
               </div>
               <p class="text-xs text-slate-300 leading-relaxed" id="bonusSummary">
-                "Driver Gurpreet reported Bay 2 chiller shutdown and 5.4°C reefer spike. Interrupted order to re-route to Bay 4. Demurrage clock started for 1.5 hrs detention."
+                Ask ChalaakSaathi for a WhatsApp incident summary or run Scenario 5 to generate a live signed POD card.
               </p>
               <div class="flex items-center gap-3 mt-3 text-xs">
-                <span class="text-slate-400"><i class="fa-solid fa-language text-cyan-400 mr-1"></i> Dialect: <strong class="text-slate-200" id="bonusLang">Hinglish / Punjabi</strong></span>
-                <span class="text-slate-400"><i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i> E-Sign: Verified</span>
+                <span class="text-slate-400"><i class="fa-solid fa-language text-cyan-400 mr-1"></i> Dialect: <strong class="text-slate-200" id="bonusLang">Auto-detected</strong></span>
+                <span class="text-slate-400"><i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i> Ledger: SQLite Verified</span>
               </div>
             </div>
             <div class="flex flex-col gap-2 shrink-0">
@@ -331,12 +348,15 @@
         </div>
       </div>
 
-      <!-- COMMERCIAL VIABILITY & ROI ACCELERATOR -->
+      <!-- COMMERCIAL VIABILITY & LIVE TOKEN UNIT ECONOMICS -->
       <div class="bg-slate-900 rounded-2xl border border-slate-800 p-5">
-        <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-2">
-          <i class="fa-solid fa-chart-line text-emerald-400"></i>
-          Measurable Value & Unit Economics at Scale
-        </h3>
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+            <i class="fa-solid fa-chart-line text-emerald-400"></i>
+            Measurable Value & Live Unit Economics
+          </h3>
+          <span id="liveTokenStats" class="text-[11px] font-mono text-cyan-400">Session: 0 tokens (0 turns)</span>
+        </div>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
           <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
             <span class="text-base font-bold text-emerald-400">₹18,400</span>
@@ -347,12 +367,12 @@
             <p class="text-[10px] text-slate-400 mt-0.5">Cold-Chain Spoilage Reduction Rate</p>
           </div>
           <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
-            <span class="text-base font-bold text-amber-400">&lt; 650 ms</span>
-            <p class="text-[10px] text-slate-400 mt-0.5">Sub-Second Native Live Audio Flow</p>
+            <span class="text-base font-bold text-amber-400" id="kpiLastTtft">&lt; 650 ms</span>
+            <p class="text-[10px] text-slate-400 mt-0.5">Sub-Second Gemini 3.8 Live Audio</p>
           </div>
           <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
-            <span class="text-base font-bold text-purple-400">₹0.18</span>
-            <p class="text-[10px] text-slate-400 mt-0.5">Cost per Call on Gemini 2.0 Flash</p>
+            <span class="text-base font-bold text-purple-400" id="kpiSessionCost">~₹0.18</span>
+            <p class="text-[10px] text-slate-400 mt-0.5">Est. Cost / Interaction</p>
           </div>
         </div>
       </div>
@@ -361,25 +381,33 @@
 
   </main>
 
-  <!-- Settings Modal (API Key Config) -->
+  <!-- Settings Modal (API Key & Model Selection) -->
   <div id="settingsModal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-md w-full shadow-2xl">
       <div class="flex items-center justify-between mb-4">
         <h3 class="font-bold text-white text-base flex items-center gap-2">
-          <i class="fa-solid fa-key text-cyan-400"></i> Gemini Live API Configuration
+          <i class="fa-solid fa-key text-cyan-400"></i> Gemini 3.8 Live Configuration
         </h3>
         <button id="btnCloseSettings" class="text-slate-400 hover:text-white">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
       <p class="text-xs text-slate-300 mb-3">
-        Enter your Google Gemini API key to connect directly to the <strong>Gemini 2.0 Multimodal Live API</strong> (WebSockets).
+        Choose the Gemini Live model and optionally override the server <code>.env</code> API key. Leave the key blank to use the server's configured <code>GEMINI_API_KEY</code>.
       </p>
-      <input id="inputApiKey" type="password" placeholder="AIzaSy... or AQ.Ab8..." class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-xs text-slate-100 font-mono mb-4 focus:outline-none focus:border-cyan-500">
-      
+
+      <label class="block text-[11px] font-semibold text-slate-400 mb-1">Gemini Live Model</label>
+      <select id="selectLiveModel" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-xs text-slate-100 mb-3 focus:outline-none focus:border-cyan-500">
+        <option value="gemini-3.8-live">gemini-3.8-live (Default Low-Latency Voice)</option>
+        <option value="gemini-3.8-live-extended-thinking">gemini-3.8-live-extended-thinking (Background Reasoning + Fillers)</option>
+      </select>
+
+      <label class="block text-[11px] font-semibold text-slate-400 mb-1">Optional Gemini API Key Override</label>
+      <input id="inputApiKey" type="password" placeholder="Leave blank to use server .env key" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-xs text-slate-100 font-mono mb-4 focus:outline-none focus:border-cyan-500">
+
       <div class="flex justify-end gap-2">
         <button id="btnSaveApiKey" class="px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold">
-          Save & Connect
+          Save & Reconnect
         </button>
       </div>
     </div>
